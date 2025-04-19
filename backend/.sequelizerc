@@ -1,0 +1,9 @@
+// backend/.sequelizerc
+const path = require('path');
+
+module.exports = {
+  'config': path.resolve('src/config', 'database.js'), // Dónde está la config de BD
+  'models-path': path.resolve('src/models'),          // Dónde guardar los modelos
+  'seeders-path': path.resolve('src/db/seeders'),     // Dónde guardar 'seeders' (opcional)
+  'migrations-path': path.resolve('src/db/migrations') // Dónde guardar las migraciones
+};
