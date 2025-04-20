@@ -1,0 +1,224 @@
+/* frontend/src/App.css - Estilos Elegantes y Profesionales */
+
+/* --- Base y Tipografía --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f8f9fc; /* Fondo gris muy suave */
+  color: #3e4a59; /* Color de texto principal (gris oscuro azulado) */
+  line-height: 1.65;
+  padding: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Contenedor Principal (Card Principal) --- */
+.app-container {
+  max-width: 700px;
+  margin: 40px auto;
+  background: linear-gradient(145deg, #ffffff, #fbfcfe); /* Blanco con gradiente muy sutil */
+  border-radius: 16px; /* Bordes más redondeados */
+  box-shadow: 0 10px 30px rgba(66, 84, 118, 0.1), 0 4px 10px rgba(66, 84, 118, 0.08); /* Sombra más pronunciada pero suave */
+  overflow: hidden;
+  border: 1px solid #e8eef3;
+}
+
+/* --- Encabezado --- */
+.app-header {
+  background: linear-gradient(120deg, #4a00e0 0%, #8e2de2 100%); /* Gradiente Morado/Violeta */
+  color: white;
+  padding: 50px 30px 40px 30px; /* Más padding vertical */
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.app-header h1 {
+  font-size: 2.2rem; /* Ligeramente más pequeño, más elegante */
+  margin-bottom: 12px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.app-header h1 span { /* Para los emojis */
+    font-size: 1.8rem; /* Ajustar tamaño de emojis */
+    margin: 0 10px;
+    vertical-align: middle;
+}
+
+.app-header .subtitle {
+  font-size: 1.1rem;
+  opacity: 0.85;
+  max-width: 500px; /* Evitar que sea demasiado ancho */
+  margin: 0 auto;
+}
+
+/* --- Secciones Interiores --- */
+section {
+  padding: 30px 35px; /* Aumentar padding */
+  border-bottom: 1px solid #e8eef3; /* Separador muy suave */
+}
+section:last-of-type { /* Usar last-of-type es más seguro */
+  border-bottom: none;
+}
+
+h2 {
+  color: #2c3e50; /* Azul/gris oscuro */
+  font-size: 1.5rem;
+  margin-bottom: 25px;
+  font-weight: 600;
+  border-bottom: 1px solid #e8eef3;
+  padding-bottom: 12px;
+}
+
+h3 {
+    color: #34495e;
+    font-size: 1.2rem;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+
+/* --- Sección de Acción y Estado --- */
+.status-section {
+    padding-top: 20px;
+    padding-bottom: 10px;
+    border-bottom: none; /* Sin borde inferior usualmente */
+}
+.action-section {
+  background-color: #fdfdfe; /* Ligeramente diferente del contenedor */
+}
+.action-box {
+  text-align: center;
+}
+.action-box p {
+    color: #5a6a7e;
+    margin-bottom: 20px;
+}
+.verified-text {
+    display: inline-block; /* Para que el fondo funcione bien */
+    background-color: #e6f9f0;
+    color: #1f7a4f;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-weight: 500;
+    margin-bottom: 25px;
+    font-size: 1rem;
+    border: 1px solid #a6e1c3;
+}
+
+/* --- Botones --- */
+.button {
+  border: none;
+  padding: 14px 35px; /* Más padding */
+  font-size: 1rem;
+  font-weight: 600; /* Más énfasis */
+  border-radius: 30px; /* Completamente redondeado */
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Transición con rebote */
+  display: inline-block;
+  margin-top: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+}
+
+.button-primary {
+  background: linear-gradient(120deg, #4a00e0 0%, #6e2de2 100%); /* Mismo gradiente que header */
+  color: white;
+}
+.button-primary:hover {
+  transform: translateY(-3px) scale(1.03); /* Efecto más pronunciado */
+  box-shadow: 0 7px 20px rgba(74, 0, 224, 0.3); /* Sombra con color */
+}
+.button-primary:active {
+    transform: translateY(-1px) scale(1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.button-primary:disabled {
+  background: linear-gradient(120deg, #bdc3c7, #abb5be); /* Gradiente gris */
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  color: #f0f0f0;
+}
+.button-buy {
+  background: linear-gradient(120deg, #1abc9c 0%, #16a085 100%); /* Gradiente verde azulado */
+}
+.button-buy:hover {
+  box-shadow: 0 7px 20px rgba(22, 160, 133, 0.3);
+}
+
+/* --- Mensajes --- */
+.message {
+  padding: 13px 20px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-weight: 500;
+  text-align: center;
+  border: 1px solid transparent;
+  font-size: 0.95rem;
+}
+.message-error { color: #e74c3c; background-color: #fdedec; border-color: #fadbd8; }
+.message-success { color: #27ae60; background-color: #eafaf1; border-color: #abebc6; }
+.message-info, .message-loading { color: #3498db; background-color: #eaf2f8; border-color: #aed6f1; }
+.message-error-inline { color: #e74c3c; font-size: 0.9em; margin-top: 10px; }
+
+/* --- Secciones de Listas (Tickets, Resultados) --- */
+.ticket-list, .winners-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 15px;
+}
+.ticket-item, .winner, .no-winner {
+  background-color: #f8faff;
+  border: 1px solid #e8eef3;
+  padding: 12px 18px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+.ticket-item span, .winner span { margin-right: 8px; }
+
+.winner { font-weight: 500; }
+.winner-first { border-left: 5px solid #f1c40f; background-color: #fef9e7; color: #b08c12; }
+.winner-second { border-left: 5px solid #bdc3c7; background-color: #f8f9f9; color: #616a6b; }
+.winner-third { border-left: 5px solid #e59866; background-color: #fdf3e6; color: #b97137; }
+.no-winner { border-left: 5px solid #ecf0f1; color: #95a5a6; font-style: italic; background-color: #fafbfb; }
+
+.no-items-message {
+  color: #7f8c8d;
+  text-align: center;
+  padding: 20px 0;
+  font-style: italic;
+}
+
+.winning-numbers {
+  font-weight: 700;
+  color: #663399; /* Púrpura */
+  font-size: 1.3em;
+  background-color: #f4e1ff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  letter-spacing: 1px;
+  border: 1px solid #d5b8ff;
+  margin-left: 5px;
+}
+
+/* --- Footer --- */
+.app-footer {
+  text-align: center;
+  padding: 30px 20px 25px 20px;
+  font-size: 0.85em;
+  color: #aab8c9; /* Más suave */
+  background-color: #f8f9fa; /* Coincide con sección acción */
+  border-top: 1px solid #e8eef3; /* Separador del contenedor */
+}
