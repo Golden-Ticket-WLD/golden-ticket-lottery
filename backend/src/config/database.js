@@ -1,53 +1,73 @@
-// backend/src/config/database.js - Corregido con SSL explícito en producción
+// backend/src/config/database.js - CORREGIDO: Parseando DATABASE_URL manualmente en prod
 
-// Cargar variables de entorno SÓLO si el archivo existe (para desarrollo local)
-// Nota: En producción (Render), las variables se setean en la plataforma, no desde un archivo .env usualmente.
-// Así que dotenv es principalmente para 'development'.
+// Importar módulo 'url' nativo de Node.js para parsear la URL de la base de datos
+const url = require('url');
+
+// Cargar variables .env SOLO para desarrollo local
+// En producción (Render), las variables se establecen en la plataforma.
 if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config(); // Carga .env desde la raíz del backend (por defecto)
+    require('dotenv').config(); // Busca .env en el directorio actual (backend/) por defecto
+    // Log opcional para desarrollo
+    // console.log(`DB Config [Dev]: Leyendo DB_USER: '${process.env.DB_USER}'`);
 }
-// Opcional: Log para verificar qué entorno se está usando y si se leyó algo de .env
-// console.log(`DB Config: Usando entorno '${process.env.NODE_ENV || 'development'}'`);
-// console.log(`DB Config: DB_USER leído es '${process.env.DB_USER}'`);
+
+// --- Preparar configuración de Producción ---
+const productionDbUrl = process.env.DATABASE_URL; // Obtener la URL de Render
+let productionConfig = {}; // Objeto para la configuración parseada
+
+if (productionDbUrl) { // Solo si la variable DATABASE_URL existe
+    try {
+        const parsedUrl = url.parse(productionDbUrl); // Parsear la URL completa
+        const auth = parsedUrl.auth ? parsedUrl.auth.split(':') : [null, null]; // Separar usuario:contraseña
+
+        productionConfig = {
+            username: auth[0],                    // Usuario extraído
+            password: auth[1],                    // Contraseña extraída
+            database: parsedUrl.pathname.split('/')[1], // Nombre de BD (quitar '/')
+            host: parsedUrl.hostname,             // Host extraído
+            port: parsedUrl.port,                 // Puerto extraído
+            dialect: 'postgres',                 // Indicar que es PostgreSQL
+            // Aplicar las opciones SSL cruciales explícitamente
+            dialectOptions: {
+                ssl: {
+                    require: true,              // Requerir conexión SSL
+                    rejectUnauthorized: false   // Aceptar certificados autofirmados (Render)
+                }
+            },
+            // Desactivar logs SQL detallados en producción
+            logging: false
+        };
+        console.log(`DB Config [Prod]: Configuración parseada OK desde DATABASE_URL (Host: ${productionConfig.host})`);
+
+    } catch (e) {
+        console.error("DB Config [Prod]: !!! ERROR CRÍTICO parseando DATABASE_URL !!!", e);
+        // Dejar productionConfig vacío o con error causará fallo al iniciar servidor
+        productionConfig = { error: 'Failed to parse DATABASE_URL' };
+    }
+} else if (process.env.NODE_ENV === 'production') {
+    // Esto no debería pasar en Render si la BD está vinculada
+    console.error("DB Config [Prod]: !!! ERROR CRÍTICO - Entorno es 'production' pero DATABASE_URL no está definida !!!");
+    productionConfig = { error: 'DATABASE_URL no definida en producción' };
+}
 
 
+// --- Exportar las configuraciones para ambos entornos ---
 module.exports = {
-// Configuración para DESARROLLO (tu máquina local)
-development: {
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT || 5432, // Usar puerto de .env o 5432 por defecto
-  dialect: 'postgres',
-  dialectOptions: {
-    ssl: process.env.DB_SSL === 'true' // Activar SSL solo si DB_SSL=true en .env
-      ? {
-          require: true,
-          // Esta es la clave para certificados autofirmados (como los de Render/Supabase)
-          rejectUnauthorized: false
-        }
-      : false // Si DB_SSL no es 'true', no usar SSL
+  development: {
+    // Configuración para DESARROLLO (se lee de .env)
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT || 5432,
+    dialect: 'postgres',
+    dialectOptions: {
+      // Activar SSL solo si DB_SSL=true en .env (para pruebas locales con BD en nube)
+      ssl: process.env.DB_SSL === 'true'
+        ? { require: true, rejectUnauthorized: false }
+        : false
+    },
+    logging: console.log // Mostrar SQL en desarrollo (útil)
   },
-  logging: console.log // Muestra logs SQL en desarrollo (útil para depurar)
-                       // Puedes cambiarlo a 'false' si es mucho ruido
-},
-
-// Configuración para PRODUCCIÓN (cuando se despliega en Render)
-production: {
-   // Render configura automáticamente DATABASE_URL en el entorno del servicio.
-   // Esta opción le dice a Sequelize que la use.
-   use_env_variable: 'DATABASE_URL',
-   dialect: 'postgres',
-   // AÑADIMOS SSL explícitamente aquí para reforzarlo:
-   ssl: true, // Forzar el uso de SSL
-   dialectOptions: {
-     ssl: {
-       require: true,              // Requerir SSL
-       rejectUnauthorized: false // <<--- MUY IMPORTANTE para aceptar certificados de Render/nube
-     }
-   },
-   // Desactivar logs SQL en producción para no llenar los logs del servidor
-   logging: false
-}
+  production: productionConfig // Usar la configuración parseada de DATABASE_URL
 };
