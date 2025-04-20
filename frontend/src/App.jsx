@@ -48,8 +48,8 @@ function App() {
                 signal={worldcoinActionId}
                 handleVerify={handleProof}
                 onError={handleError}
-                // --- CAMBIO AQUÍ: Probar solo con 'orb' ---
-                credential_types={['orb']}
+                credential_types={['orb', 'phone']} // O solo ['orb'] si prefieres
+                enable_telemetry={false}
                 // --- FIN CAMBIO ---
             >
               {({ open }) => <button onClick={open} disabled={isLoading || !worldcoinAppId || !worldcoinActionId} className="button button-primary button-worldid">Verificar con World ID</button>}
