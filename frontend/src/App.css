@@ -228,3 +228,43 @@ h3 {
   border-top: 1px solid #3a3f4a; /* Separador consistente */
   background-color: #22252c; /* Fondo igual a ítems de lista */
 }
+/* frontend/src/App.css - Estilos Adicionales para Instrucciones */
+
+/* --- Sección de Instrucciones --- */
+.instructions-section {
+  background-color: rgba(255, 255, 255, 0.04); /* Fondo ligeramente más claro */
+  border-bottom: 1px solid #444a55; /* Separador más oscuro para contraste */
+}
+
+.instructions-section h2 span[role="img"] {
+    margin-right: 8px;
+    font-size: 0.9em;
+}
+.instructions-section h3 span[role="img"] {
+    margin-right: 8px;
+     font-size: 0.9em;
+}
+
+.instructions-list, .rules-list {
+  list-style-position: inside; /* Bolitas/números dentro del área */
+  margin-left: 10px;
+  margin-bottom: 20px;
+  color: #b0b8c0; /* Texto un poco más claro */
+}
+.instructions-list li, .rules-list li {
+  margin-bottom: 12px;
+  padding-left: 5px;
+}
+.instructions-list strong, .rules-list strong {
+  color: #e4e6eb; /* Resaltar pasos/premios */
+  font-weight: 600;
+}
+
+.rules-list {
+    list-style-type: disc; /* Usar bolitas para reglas */
+     margin-top: 10px;
+}
+
+.rules-list li {
+    margin-bottom: 8px; /* Menos espacio entre reglas */
+}
