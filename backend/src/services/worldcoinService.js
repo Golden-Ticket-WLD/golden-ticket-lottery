@@ -1,52 +1,58 @@
-// backend/src/services/worldcoinService.js - Usando @worldcoin/id SDK (Versión Confirmada)
+// backend/src/services/worldcoinService.js - Volviendo a Axios para API v1
 
-// Importar desde la ruta correcta del paquete @worldcoin/id
-const { verifyCloudProof } = require('@worldcoin/id/backend');
+const axios = require('axios'); // Necesitamos axios de nuevo
 
-async function verifyWorldIdProof(proofData) {
+const WORLDCOIN_API_BASE_URL = 'https://developer.worldcoin.org/api/v1';
+
+async function verifyWorldIdProof(proofData /*, signal = ''*/) {
   const { merkle_root, nullifier_hash, proof } = proofData;
   const app_id = process.env.WORLDCOIN_APP_ID;
   const action_id = process.env.WORLDCOIN_ACTION_ID;
 
-  // Validación de configuración y datos
-  if (!app_id) return { success: false, error: 'Configuración incompleta (APP_ID).' };
-  if (!action_id) return { success: false, error: 'Configuración incompleta (ACTION_ID).' };
-  if (!merkle_root || !nullifier_hash || !proof) return { success: false, error: 'Datos proof inválidos.' };
+  // Validación de entrada
+  if (!app_id || !action_id || !merkle_root || !nullifier_hash || !proof) {
+    const errorMsg = 'Faltan datos config/proof.';
+    console.error(`[verifyWorldIdProof] Error: ${errorMsg}`, { proofData: {...proofData, proof: 'OMITIDO'} });
+    return { success: false, error: errorMsg };
+  }
 
-  console.log(`[verifyWorldIdProof - SDK @worldcoin/id] Verificando proof para Action: ${action_id}, Nullifier: ${nullifier_hash.substring(0,10)}...`);
+  const verificationUrl = `${WORLDCOIN_API_BASE_URL}/verify/${app_id}`;
+  const payload = {
+      merkle_root: merkle_root,
+      nullifier_hash: nullifier_hash,
+      proof: proof,
+      action: action_id,
+      signal: action_id, // Usar action_id como signal
+      verification_level: 'orb' // Requerir Orb
+  };
+
+  console.log(`[verifyWorldIdProof] Enviando a Worldcoin API (v1) con Axios:`);
+  console.log(`  -> URL: ${verificationUrl}`);
+  console.log(`  -> Payload: ${JSON.stringify({...payload, proof: 'PROOF_OMITIDO_EN_LOG'}, null, 2)}`);
 
   try {
-    // Llamar a la función de verificación del SDK @worldcoin/id
-    await verifyCloudProof(
-      nullifier_hash, // Argumento 1: nullifier_hash
-      merkle_root,    // Argumento 2: merkle_root
-      proof,          // Argumento 3: proof
-      {               // Argumento 4: Opciones
-        action: action_id,
-        signal: action_id, // Usar action_id como signal consistentemente
-        app_id: app_id,
-         // verification_level no es un parámetro directo aquí, el SDK lo maneja.
-      }
-    );
+    const response = await axios.post(verificationUrl, payload, {
+      headers: { 'Content-Type': 'application/json' },
+      timeout: 20000
+    });
 
-    // Si verifyCloudProof NO lanzó un error, la verificación fue exitosa
-    console.log("[verifyWorldIdProof - SDK @worldcoin/id] Verificación SDK EXITOSA.");
-    return {
-      success: true,
-      nullifierHash: proofData.nullifier_hash // Devolvemos el nullifier
-    };
-
-  } catch (error) {
-    // El SDK lanza un error si la verificación falla
-    console.error("[verifyWorldIdProof - SDK @worldcoin/id] Error durante verificación:", { code: error.code, detail: error.detail, message: error.message } ); // Log más detallado del error SDK
-    let errorMessage = error.detail || error.message || 'Error desconocido durante la verificación con el SDK.'; // Priorizar 'detail' si existe
-    if(error.code){ // Añadir código de error del SDK si existe
-        errorMessage = `Error SDK (${error.code}): ${errorMessage}`;
+    // Analizar respuesta
+    if (response.status === 200 && response.data?.nullifier_hash === nullifier_hash) {
+        console.log(`[verifyWorldIdProof] Verificación EXITOSA (Axios) Nullifier: ${response.data.nullifier_hash}`);
+        return { success: true, nullifierHash: response.data.nullifier_hash };
+    } else {
+         const errorDetail = response.data?.detail || `Respuesta inesperada o nullifier no coincide (Status: ${response.status || 200})`;
+         const errorCode = response.data?.code || '...';
+         console.warn(`[verifyWorldIdProof] Verificación FALLIDA (Axios): Código=${errorCode}, Detalle=${errorDetail}`);
+         return { success: false, error: `Error API (${response.status || 200}): ${errorDetail}` };
     }
-    return { success: false, error: errorMessage };
+  } catch (error) {
+    let status = '...'; let message = '...'; let errorDetail = '...';
+    if (error.response) { status = error.response.status; errorDetail = error.response.data?.detail || JSON.stringify(error.response.data) || '...'; message = `Error API (${status}): ${errorDetail}`; console.error(`[verifyWorldIdProof] Error API Axios (${status}): ${errorDetail}`);}
+    else if (error.request) { message = `Error Red/Timeout Axios...`; console.error(`[verifyWorldIdProof] Error Red/Timeout Axios`); }
+    else { message = `Error Axios Config...`; console.error(`[verifyWorldIdProof] Error Axios Config`);}
+    return { success: false, error: message };
   }
 }
 
-module.exports = {
-  verifyWorldIdProof
-};
+module.exports = { verifyWorldIdProof };
