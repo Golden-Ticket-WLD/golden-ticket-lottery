@@ -1,14 +1,14 @@
-// frontend/src/App.jsx - Usando MiniKit para Flujo Nativo
+// frontend/src/App.jsx - Usando MiniKit (Sintaxis Revisada)
 
 import React, { useState, useEffect, useCallback } from 'react';
-// import { IDKitWidget } from '@worldcoin/idkit'; // <-- ELIMINADO/COMENTADO
-import { useMiniKit } from '@worldcoin/minikit-js'; // <-- AÑADIDO
+import { useMiniKit } from '@worldcoin/minikit-js'; // Importar hook
+// Quitar o comentar import { IDKitWidget } from '@worldcoin/idkit'; si aún estaba
 import { verifyWorldId, confirmPaymentOnBackend, fetchMyTickets, fetchLatestResults } from './services/api';
 import CountdownTimer from './components/CountdownTimer';
 import './App.css';
 
 function App() {
-  // --- Estados (Sin cambios) ---
+  // --- Estados ---
   const [isVerified, setIsVerified] = useState(false);
   const [nullifierHash, setNullifierHash] = useState(null);
   const [myTickets, setMyTickets] = useState([]);
@@ -17,54 +17,42 @@ function App() {
   const [paymentStatus, setPaymentStatus] = useState('idle');
   const [error, setError] = useState('');
 
-  // --- Configuración (appId y actionId siguen siendo relevantes) ---
+  // --- Configuración ---
   const worldcoinAppId = import.meta.env.VITE_WORLDCOIN_APP_ID;
-  const worldcoinActionId = import.meta.env.VITE_WORLDCOIN_ACTION_ID; // Se usa como signal y action
+  const worldcoinActionId = import.meta.env.VITE_WORLDCOIN_ACTION_ID;
   const receiverAddress = import.meta.env.VITE_MY_WLD_RECEIVER_ADDRESS;
   const paymentCallbackUrlBase = import.meta.env.VITE_PAYMENT_CALLBACK_URL;
   const tokenIdentifier = import.meta.env.VITE_WLD_CONTRACT_ADDRESS || "WLD";
 
   // --- Hook de MiniKit ---
-  // Obtener la función para abrir el diálogo nativo de World ID
-  const { openWorldID } = useMiniKit();
+  const { openWorldID } = useMiniKit(); // Obtener función del hook
 
-  // --- Funciones de Carga (Sin cambios) ---
-  const loadMyTickets = useCallback(async (hash) => { /* ...código igual... */ }, []);
-  const loadResults = useCallback(async () => { /* ...código igual... */ }, []);
+  // --- Funciones de Carga ---
+  const loadMyTickets = useCallback(async (hash) => { if (!hash) return; try { const res = await fetchMyTickets(hash); setMyTickets(Array.isArray(res?.data?.tickets) ? res.data.tickets : []); } catch (err) { console.error("Error obteniendo tickets:", err); setError("Could not load your tickets."); setMyTickets([]); } }, []);
+  const loadResults = useCallback(async () => { setIsLoading(true); setError(''); try { const res = await fetchLatestResults(); if (res?.data?.success && res?.data?.results) { setLastDraw(res.data.results); setError(''); } else { setLastDraw(null); } } catch (err) { console.error("Error obteniendo resultados:", err); setError("Could not load results."); setLastDraw(null); } finally { setIsLoading(false); } }, []);
 
-  // --- Manejadores de Eventos ---
-  // handleProof y handleError AHORA se pasarán como callbacks a openWorldID
-  const handleProof = useCallback(async (proofResponse) => {
-    console.log("[handleProof - MiniKit] Proof recibido:", proofResponse); // Cambiado log para claridad
-    setIsLoading(true); setPaymentStatus('idle'); setError('');
-    try {
-      const res = await verifyWorldId(proofResponse);
-      if (res.data.success && res.data.nullifierHash) {
-          setNullifierHash(res.data.nullifierHash); setIsVerified(true); loadMyTickets(res.data.nullifierHash);
-      } else { throw new Error(res?.data?.message || 'Verification failed.'); }
-    } catch (err) { console.error("[handleProof] Error:", err); setError(`Verification Error: ${err.message||'?'}`); setIsVerified(false); setNullifierHash(null); } finally { setIsLoading(false); }
-  }, [loadMyTickets]);
+  // --- Manejadores ---
+  // (Se usan ahora como callbacks para openWorldID)
+  const handleProof = useCallback(async (proofResponse) => { console.log("[handleProof - MiniKit] Proof:", proofResponse); setIsLoading(true); setPaymentStatus('idle'); setError(''); try { const res = await verifyWorldId(proofResponse); if (res.data.success && res.data.nullifierHash) { setNullifierHash(res.data.nullifierHash); setIsVerified(true); loadMyTickets(res.data.nullifierHash); } else { throw new Error(res?.data?.message || 'Verification failed.'); } } catch (err) { console.error("[handleProof] Error:", err); setError(`Verification Error: ${err.message||'?'}`); setIsVerified(false); setNullifierHash(null); } finally { setIsLoading(false); } }, [loadMyTickets]);
+  const handleError = useCallback((errorData) => { console.error("[handleError - MiniKit] Error:", errorData); setError(`World ID Error: ${errorData?.code || '?'}`); }, []);
+  // (handleInitiatePayment y handlePaymentCallback sin cambios lógicos)
+  const handleInitiatePayment = () => { /* ... */ };
+  const handlePaymentCallback = useCallback(async () => { /* ... */ }, [nullifierHash, paymentStatus, loadMyTickets]);
 
-  const handleError = useCallback((errorData) => {
-    console.error("[handleError - MiniKit] Error:", errorData); // Cambiado log para claridad
-    setError(`World ID Error: ${errorData?.code || '?'}`);
-  }, []);
-
-  const handleInitiatePayment = () => { /* ...código sin cambios... */ };
-  const handlePaymentCallback = useCallback(async () => { /* ...código sin cambios... */ }, [nullifierHash, paymentStatus, loadMyTickets]);
-
-  // --- Efectos (Sin cambios) ---
-  useEffect(() => { /* ...callback effect... */ }, [handlePaymentCallback, nullifierHash]);
+  // --- Efectos (Sin cambios lógicos) ---
+  useEffect(() => { /* ... callback effect ... */ }, [handlePaymentCallback, nullifierHash]);
   useEffect(() => { loadResults(); }, [loadResults]);
-  useEffect(() => { if (isVerified && nullifierHash) { loadMyTickets(nullifierHash); } }, [isVerified, nullifierHash, loadMyTickets]);
+  useEffect(() => { if (isVerified && nullifierHash) loadMyTickets(nullifierHash); }, [isVerified, nullifierHash, loadMyTickets]);
 
-  // --- RENDERIZADO JSX (Reemplazando IDKitWidget) ---
+
+  // --- RENDERIZADO JSX ---
   return (
     <div className="app-wrapper">
       <div className="app-container card-texture">
-         <header className="app-header">{/*...*/}</header>
-         <CountdownTimer />
-         <section className="status-section">{/*...*/}</section>
+        {/* ... (Header, CountdownTimer, Status Section sin cambios) ... */}
+        <header className="app-header">...</header>
+        <CountdownTimer />
+        <section className="status-section">...</section>
 
         <section className="action-section card">
           {!isVerified ? (
@@ -72,35 +60,40 @@ function App() {
               <h2>Step 1: Verify Identity</h2>
               <p>We need to confirm you are a unique human.</p>
 
-              {/* --- REEMPLAZO DE IDKitWidget --- */}
+              {/* --- Botón que llama a openWorldID --- */}
               <button
-                // Llama a openWorldID pasando los callbacks
-                onClick={() => openWorldID({
-                    onSuccess: handleProof, // Tu función para éxito
-                    onError: handleError,    // Tu función para error
-                    // MiniKit debería usar app_id, action, signal de la config global
-                    // o podrías necesitarlos aquí si el Provider no es suficiente, revisa docs de MiniKit
-                })}
+                onClick={() => { // Asegúrate que la sintaxis es correcta
+                  console.log("Botón Verificar presionado. Llamando a openWorldID...");
+                  openWorldID({ // Objeto con callbacks
+                      onSuccess: handleProof,
+                      onError: handleError,
+                      // MiniKit debería obtener app_id/action/signal de la config del Provider o contexto
+                  });
+                 }}
                 disabled={isLoading || !worldcoinAppId || !worldcoinActionId}
-                className="button button-primary button-worldid"
+                className="button button-primary button-worldid" // Revisa nombres de clases vs CSS
               >
                 Verify with World ID
               </button>
-              {/* --- FIN REEMPLAZO --- */}
+              {/* --- Fin Botón --- */}
 
               {(!worldcoinAppId || !worldcoinActionId) && <p className="message message-error-inline">Error: Missing Config.</p>}
             </div>
           ) : (
-            <div className="action-box purchase-box">
-                 {/* ... (sección compra sin cambios) ... */}
-            </div>
+             <div className="action-box purchase-box">{/* ... (Sección Compra) ... */}</div>
           )}
         </section>
 
-        {/* ... (secciones tickets, resultados, footer sin cambios) ... */}
+        {/* ... (Secciones Tickets y Resultados) ... */}
+         {isVerified && ( <section className="tickets-section data-section">...</section> )}
+         <section className="results-section data-section">...</section>
+
+        {/* ... (Footer) ... */}
+         <footer className="app-footer">...</footer>
       </div>
     </div>
   );
 }
 
 export default App;
+// Asegúrate de reemplazar las secciones omitidas '...' con el contenido JSX completo de la versión anterior.
