@@ -1,87 +1,67 @@
-/* frontend/src/App.css - Estilos Elegantes v3 + Timer (Sin Comentarios) */
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: 'Poppins', sans-serif;
-  background-color: #1a1d24;
-  color: #adb5bd;
-  line-height: 1.7;
+/* Estilos para Countdown Timer v2 */
+.countdown-section {
+  padding: 20px 35px 10px 35px; /* Menos padding inferior */
+  border-bottom: 1px solid #3a3f4a;
+}
+.countdown-timer {
+  background: linear-gradient(145deg, #343843, #2a2d35); /* Fondo ligeramente más claro que el contenedor */
   padding: 20px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 450px; /* Más ancho si es necesario */
+  margin: 0 auto;
+  border: 1px solid #444a55;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+.countdown-label {
+  font-size: 0.85rem;
+  color: #8b949e;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+.countdown-values {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
+  gap: 5px; /* Reducir gap */
+  color: #e4e6eb;
+  font-weight: 600; /* Fuente más fina */
+  font-size: 2.2rem; /* Tamaño más grande */
+  line-height: 1;
+  font-family: 'Lato', sans-serif; /* Usar Lato también aquí */
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
-
-.app-wrapper { width: 100%; max-width: 720px; padding: 20px 0; }
-
-.app-container {
-  background: linear-gradient(145deg, #2c2f38, #23252b);
-  border-radius: 12px;
-  box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0px rgba(255, 255, 255, 0.03);
-  overflow: hidden;
-  border: 1px solid #3a3f4a;
+.countdown-values span:not(.separator) {
+  display: inline-block;
+  background-color: rgba(0,0,0,0.15);
+  padding: 10px 5px; /* Ajustar padding */
+  border-radius: 5px;
+  min-width: 55px; /* Ancho fijo */
+  border: 1px solid rgba(255,255,255,0.05);
 }
-
-.app-header { padding: 40px 35px; text-align: center; border-bottom: 1px solid #3a3f4a; background: rgba(255, 255, 255, 0.02); }
-.app-header .main-title { font-family: 'Playfair Display', serif; font-size: 2.4rem; margin-bottom: 10px; font-weight: 700; color: #e4e6eb; letter-spacing: 0.5px; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
-.app-header .main-title span { font-size: 1.8rem; margin: 0 10px; vertical-align: middle; opacity: 0.8; }
-.app-header .subtitle { font-size: 1.05rem; color: #8b949e; max-width: 500px; margin: 0 auto; }
-
-.timer-section { background-color: rgba(0, 0, 0, 0.15); padding: 25px 30px; text-align: center; border-bottom: 1px solid #3a3f4a; }
-.timer-section h2 { color: #e4e6eb; font-size: 1.3rem; margin-bottom: 18px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; border-bottom: none; padding-bottom: 0; font-family: 'Poppins', sans-serif; }
-.countdown-timer { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-.countdown-timer div { display: flex; flex-direction: column; align-items: center; }
-.countdown-timer span { font-family: 'Poppins', monospace; font-size: 2.2rem; font-weight: 600; color: #f0b90b; background-color: rgba(0, 0, 0, 0.2); padding: 8px 12px; border-radius: 4px; min-width: 55px; line-height: 1.1; margin-bottom: 6px; border: 1px solid rgba(240, 185, 11, 0.2); }
-.countdown-timer div span + span { font-size: 0.75rem; color: #8b949e; text-transform: uppercase; letter-spacing: 0.8px; }
-.draw-in-progress { font-weight: 600; color: #f1c40f; font-size: 1.1rem; }
-
-section { padding: 30px 35px; border-bottom: 1px solid #3a3f4a; }
-section:last-of-type { border-bottom: none; }
-.action-section, .data-section { margin-top: 1px; margin-bottom: 1px; }
-h2 { font-family: 'Playfair Display', serif; color: #ccc; font-size: 1.6rem; margin-bottom: 25px; font-weight: 700; text-align: center; padding-bottom: 0; border-bottom: none; }
-h3 { color: #b0b8c0; font-size: 1.2rem; margin-top: 25px; margin-bottom: 15px; font-weight: 600; }
-
-.action-box { text-align: center; }
-.action-box p { color: #8b949e; margin-bottom: 25px; font-size: 0.95rem;}
-.verified-text { display: inline-block; background-color: rgba(63, 185, 80, 0.1); color: #3fb950; border: 1px solid rgba(63, 185, 80, 0.3); padding: 6px 15px; border-radius: 20px; font-weight: 500; margin-bottom: 25px; font-size: 0.9rem; }
-
-.button { border: 1px solid transparent; padding: 12px 30px; font-size: 0.95rem; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.25s ease; display: inline-block; margin-top: 10px; text-decoration: none; letter-spacing: 0.3px; }
-.button-primary { background-color: #c9a450; color: #1a1d24; border-color: #ad8c3a; box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15); }
-.button-primary:hover { background-color: #d4af5f; border-color: #c9a450; transform: translateY(-2px); box-shadow: 0 5px 10px rgba(201, 164, 80, 0.2); }
-.button-primary:active { transform: translateY(0px); background-color: #ad8c3a; }
-.button-primary:disabled { background-color: #484f5a; border-color: #404650; cursor: not-allowed; transform: none; box-shadow: none; color: #76808c; }
-.button-verify {}
-.button-purchase {}
-
-.message { padding: 10px 15px; border-radius: 5px; margin: 15px 0; font-weight: 500; text-align: left; border: 1px solid transparent; font-size: 0.9rem; display: flex; align-items: center;}
-.message span[role=\"img\"] { margin-right: 8px; font-size: 1.1em; }
-.message-error { color: #f85149; background-color: rgba(248, 81, 73, 0.1); border-color: rgba(248, 81, 73, 0.3); }
-.message-success { color: #3fb950; background-color: rgba(63, 185, 80, 0.1); border-color: rgba(63, 185, 80, 0.3); }
-.message-info { color: #58a6ff; background-color: rgba(88, 166, 255, 0.1); border-color: rgba(88, 166, 255, 0.3); }
-.message-loading { color: #e1b038; background-color: rgba(225, 176, 56, 0.1); border-color: rgba(225, 176, 56, 0.3); }
-.message-error-inline { color: #f85149; font-size: 0.85em; margin-top: 12px; text-align: center;}
-
-.data-section { background-color: rgba(255, 255, 255, 0.02); }
-.item-list { list-style: none; padding: 0; margin-top: 15px;}
-.list-item { background-color: #22252c; border: 1px solid #444a55; color: #b0b8c0; padding: 12px 18px; margin-bottom: 10px; border-radius: 6px; font-size: 0.95rem; display: flex; align-items: center; transition: border-color 0.2s ease;}
-.list-item:hover { border-color: #6e7681; }
-.item-icon { margin-right: 12px; font-size: 1.4em; opacity: 0.7; }
-.item-data { flex-grow: 1; font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;}
-.winner { font-weight: 500; }
-.winner-first { border-color: #e3b341; background-color: rgba(227, 179, 65, 0.08); color: #e3b341;}
-.winner-second { border-color: #9ea8b3; background-color: rgba(158, 168, 179, 0.08); color: #b0b8c0;}
-.winner-third { border-color: #c58d4b; background-color: rgba(197, 141, 75, 0.08); color: #d9a066;}
-.no-winner { border-color: #444a55; color: #6e7681; font-style: italic; }
-.no-items-message { color: #6e7681; text-align: center; padding: 20px 0; font-style: italic; }
-
-.results-summary { margin-bottom: 25px; }
-.results-summary p { margin-bottom: 8px; font-size: 1rem;}
-.winning-numbers { font-weight: 700; color: #f0b90b; font-size: 1.2em; background-color: rgba(240, 185, 11, 0.1); padding: 5px 10px; border-radius: 4px; display: inline-block; border: 1px solid rgba(240, 185, 11, 0.3); margin-left: 8px; font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; letter-spacing: 1px; }
-
-.app-footer { text-align: center; padding: 25px 20px; font-size: 0.8em; color: #58606a; border-top: 1px solid #3a3f4a; background-color: #22252c; }
+ .countdown-values span.separator {
+    font-size: 1.8rem;
+    color: #6a717c;
+    padding: 10px 0;
+    align-self: center;
+    opacity: 0.7;
+}
+.countdown-values span small {
+  font-size: 0.65rem; /* Más pequeño */
+  display: block;
+  opacity: 0.6;
+  margin-top: 5px; /* Más separación */
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+.countdown-target-time {
+  font-size: 0.8rem;
+  color: #76808c;
+  margin-top: 15px;
+  font-style: italic;
+}
+.countdown-values.drawing-now {
+    font-size: 1.5rem;
+    color: #f1c40f; /* Dorado cuando está en progreso */
+    padding: 10px 0;
+}
