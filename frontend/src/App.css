@@ -1,19 +1,13 @@
-/* frontend/src/App.css - Estilos Elegantes v3 - Dark Theme */
+/* frontend/src/App.css - Estilos Elegantes v3 + Timer (Sin Comentarios) */
 
-/* --- Importar Fuentes --- */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
 
-/* --- Reset Básico y Estilos Base --- */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Poppins', sans-serif; /* Fuente moderna y limpia */
-  background-color: #1a1d24; /* Fondo muy oscuro casi negro */
-  color: #adb5bd; /* Texto principal gris claro */
+  font-family: 'Poppins', sans-serif;
+  background-color: #1a1d24;
+  color: #adb5bd;
   line-height: 1.7;
   padding: 20px;
   -webkit-font-smoothing: antialiased;
@@ -24,247 +18,70 @@ body {
   min-height: 100vh;
 }
 
-/* --- Wrapper para Centrar --- */
-.app-wrapper {
-  width: 100%;
-  max-width: 720px; /* Un poco más ancho */
-  padding: 20px 0; /* Espacio vertical */
-}
+.app-wrapper { width: 100%; max-width: 720px; padding: 20px 0; }
 
-/* --- Contenedor Principal Estilo Tarjeta Oscura --- */
 .app-container {
-  background: linear-gradient(145deg, #2c2f38, #23252b); /* Gradiente oscuro sutil */
-  border-radius: 12px; /* Bordes menos agresivos */
-  box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.3), /* Sombra pronunciada */
-              inset 0 1px 0px rgba(255, 255, 255, 0.03); /* Ligero borde superior interno */
+  background: linear-gradient(145deg, #2c2f38, #23252b);
+  border-radius: 12px;
+  box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0px rgba(255, 255, 255, 0.03);
   overflow: hidden;
-  border: 1px solid #3a3f4a; /* Borde sutil */
+  border: 1px solid #3a3f4a;
 }
 
-/* --- Encabezado --- */
-.app-header {
-  padding: 40px 35px;
-  text-align: center;
-  border-bottom: 1px solid #3a3f4a; /* Separador */
-  background: rgba(255, 255, 255, 0.02); /* Ligero destaque */
-}
+.app-header { padding: 40px 35px; text-align: center; border-bottom: 1px solid #3a3f4a; background: rgba(255, 255, 255, 0.02); }
+.app-header .main-title { font-family: 'Playfair Display', serif; font-size: 2.4rem; margin-bottom: 10px; font-weight: 700; color: #e4e6eb; letter-spacing: 0.5px; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
+.app-header .main-title span { font-size: 1.8rem; margin: 0 10px; vertical-align: middle; opacity: 0.8; }
+.app-header .subtitle { font-size: 1.05rem; color: #8b949e; max-width: 500px; margin: 0 auto; }
 
-.app-header .main-title {
-  font-family: 'Playfair Display', serif; /* Fuente elegante para título */
-  font-size: 2.4rem;
-  margin-bottom: 10px;
-  font-weight: 700;
-  color: #e4e6eb; /* Texto casi blanco */
-  letter-spacing: 0.5px;
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-.app-header .main-title span { /* Emojis */
-  font-size: 1.8rem; margin: 0 10px; vertical-align: middle; opacity: 0.8;
-}
+.timer-section { background-color: rgba(0, 0, 0, 0.15); padding: 25px 30px; text-align: center; border-bottom: 1px solid #3a3f4a; }
+.timer-section h2 { color: #e4e6eb; font-size: 1.3rem; margin-bottom: 18px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; border-bottom: none; padding-bottom: 0; font-family: 'Poppins', sans-serif; }
+.countdown-timer { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+.countdown-timer div { display: flex; flex-direction: column; align-items: center; }
+.countdown-timer span { font-family: 'Poppins', monospace; font-size: 2.2rem; font-weight: 600; color: #f0b90b; background-color: rgba(0, 0, 0, 0.2); padding: 8px 12px; border-radius: 4px; min-width: 55px; line-height: 1.1; margin-bottom: 6px; border: 1px solid rgba(240, 185, 11, 0.2); }
+.countdown-timer div span + span { font-size: 0.75rem; color: #8b949e; text-transform: uppercase; letter-spacing: 0.8px; }
+.draw-in-progress { font-weight: 600; color: #f1c40f; font-size: 1.1rem; }
 
-.app-header .subtitle {
-  font-size: 1.05rem;
-  color: #8b949e; /* Gris medio */
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-/* --- Secciones con Separación Clara --- */
-section {
-  padding: 30px 35px; /* Más padding interno */
-  border-bottom: 1px solid #3a3f4a;
-  /* Eliminar fondo de sección para contraste con listas */
-}
+section { padding: 30px 35px; border-bottom: 1px solid #3a3f4a; }
 section:last-of-type { border-bottom: none; }
-/* Margen EXPLÍCITO entre las principales áreas de contenido */
-.action-section, .data-section {
-    margin-top: 1px; /* Pequeño margen para reforzar el borde */
-    margin-bottom: 1px;
-}
-
-h2 {
-  font-family: 'Playfair Display', serif;
-  color: #ccc; /* Encabezados de sección más claros */
-  font-size: 1.6rem;
-  margin-bottom: 25px;
-  font-weight: 700;
-  text-align: center;
-  padding-bottom: 0;
-  border-bottom: none; /* Sin doble borde */
-}
-
-h3 {
-    color: #b0b8c0;
-    font-size: 1.2rem;
-    margin-top: 25px;
-    margin-bottom: 15px;
-    font-weight: 600;
-}
-
-/* --- Área de Acción --- */
-.action-section {} /* Sin estilos específicos de fondo */
+.action-section, .data-section { margin-top: 1px; margin-bottom: 1px; }
+h2 { font-family: 'Playfair Display', serif; color: #ccc; font-size: 1.6rem; margin-bottom: 25px; font-weight: 700; text-align: center; padding-bottom: 0; border-bottom: none; }
+h3 { color: #b0b8c0; font-size: 1.2rem; margin-top: 25px; margin-bottom: 15px; font-weight: 600; }
 
 .action-box { text-align: center; }
 .action-box p { color: #8b949e; margin-bottom: 25px; font-size: 0.95rem;}
+.verified-text { display: inline-block; background-color: rgba(63, 185, 80, 0.1); color: #3fb950; border: 1px solid rgba(63, 185, 80, 0.3); padding: 6px 15px; border-radius: 20px; font-weight: 500; margin-bottom: 25px; font-size: 0.9rem; }
 
-.verified-text {
-    display: inline-block;
-    background-color: rgba(30, 100, 60, 0.2); /* Verde oscuro tenue */
-    color: #3fb950; /* Verde más brillante */
-    border: 1px solid rgba(63, 185, 80, 0.3);
-    padding: 6px 15px;
-    border-radius: 20px;
-    font-weight: 500;
-    margin-bottom: 25px;
-    font-size: 0.9rem;
-}
+.button { border: 1px solid transparent; padding: 12px 30px; font-size: 0.95rem; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.25s ease; display: inline-block; margin-top: 10px; text-decoration: none; letter-spacing: 0.3px; }
+.button-primary { background-color: #c9a450; color: #1a1d24; border-color: #ad8c3a; box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15); }
+.button-primary:hover { background-color: #d4af5f; border-color: #c9a450; transform: translateY(-2px); box-shadow: 0 5px 10px rgba(201, 164, 80, 0.2); }
+.button-primary:active { transform: translateY(0px); background-color: #ad8c3a; }
+.button-primary:disabled { background-color: #484f5a; border-color: #404650; cursor: not-allowed; transform: none; box-shadow: none; color: #76808c; }
+.button-verify {}
+.button-purchase {}
 
-/* --- Botones con Estilo Premium --- */
-.button {
-  border: 1px solid transparent;
-  padding: 12px 30px; /* Ligeramente más pequeño verticalmente */
-  font-size: 0.95rem;
-  font-weight: 600;
-  border-radius: 6px; /* Bordes más definidos */
-  cursor: pointer;
-  transition: all 0.25s ease;
-  display: inline-block;
-  margin-top: 10px;
-  text-decoration: none;
-  letter-spacing: 0.3px;
-}
-.button-primary {
-  background-color: #c9a450; /* Oro/Bronce */
-  color: #1a1d24; /* Texto oscuro sobre dorado */
-  border-color: #ad8c3a;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
-}
-.button-primary:hover {
-  background-color: #d4af5f;
-  border-color: #c9a450;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 10px rgba(201, 164, 80, 0.2);
-}
-.button-primary:active {
-    transform: translateY(0px);
-    background-color: #ad8c3a;
-}
-.button-primary:disabled {
-  background-color: #484f5a;
-  border-color: #404650;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-  color: #76808c;
-}
-/* El botón de compra puede usar los mismos estilos */
-.button-buy {}
-
-/* --- Mensajes --- */
 .message { padding: 10px 15px; border-radius: 5px; margin: 15px 0; font-weight: 500; text-align: left; border: 1px solid transparent; font-size: 0.9rem; display: flex; align-items: center;}
-.message span[role="img"] { margin-right: 8px; font-size: 1.1em; }
+.message span[role=\"img\"] { margin-right: 8px; font-size: 1.1em; }
 .message-error { color: #f85149; background-color: rgba(248, 81, 73, 0.1); border-color: rgba(248, 81, 73, 0.3); }
 .message-success { color: #3fb950; background-color: rgba(63, 185, 80, 0.1); border-color: rgba(63, 185, 80, 0.3); }
 .message-info { color: #58a6ff; background-color: rgba(88, 166, 255, 0.1); border-color: rgba(88, 166, 255, 0.3); }
 .message-loading { color: #e1b038; background-color: rgba(225, 176, 56, 0.1); border-color: rgba(225, 176, 56, 0.3); }
-.message-error-inline { color: #f85149; font-size: 0.85em; margin-top: 10px; text-align: center;}
+.message-error-inline { color: #f85149; font-size: 0.85em; margin-top: 12px; text-align: center;}
 
-
-/* --- Secciones de Datos (Tickets, Resultados) --- */
-.data-section {
-    background-color: rgba(255, 255, 255, 0.02); /* Fondo muy sutil para agrupar datos */
-}
-.item-list { list-style: none; padding: 0; }
-.list-item {
-  background-color: #22252c; /* Fondo oscuro para ítems */
-  border: 1px solid #444a55;
-  color: #b0b8c0;
-  padding: 12px 18px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  display: flex;
-  align-items: center;
-  transition: border-color 0.2s ease;
-}
-.list-item:hover {
-    border-color: #6e7681;
-}
+.data-section { background-color: rgba(255, 255, 255, 0.02); }
+.item-list { list-style: none; padding: 0; margin-top: 15px;}
+.list-item { background-color: #22252c; border: 1px solid #444a55; color: #b0b8c0; padding: 12px 18px; margin-bottom: 10px; border-radius: 6px; font-size: 0.95rem; display: flex; align-items: center; transition: border-color 0.2s ease;}
+.list-item:hover { border-color: #6e7681; }
 .item-icon { margin-right: 12px; font-size: 1.4em; opacity: 0.7; }
 .item-data { flex-grow: 1; font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;}
-
 .winner { font-weight: 500; }
-.winner-first { border-color: #e3b341; background-color: rgba(227, 179, 65, 0.08); }
-.winner-second { border-color: #9ea8b3; background-color: rgba(158, 168, 179, 0.08); }
-.winner-third { border-color: #c58d4b; background-color: rgba(197, 141, 75, 0.08); }
+.winner-first { border-color: #e3b341; background-color: rgba(227, 179, 65, 0.08); color: #e3b341;}
+.winner-second { border-color: #9ea8b3; background-color: rgba(158, 168, 179, 0.08); color: #b0b8c0;}
+.winner-third { border-color: #c58d4b; background-color: rgba(197, 141, 75, 0.08); color: #d9a066;}
 .no-winner { border-color: #444a55; color: #6e7681; font-style: italic; }
-
 .no-items-message { color: #6e7681; text-align: center; padding: 20px 0; font-style: italic; }
 
 .results-summary { margin-bottom: 25px; }
 .results-summary p { margin-bottom: 8px; font-size: 1rem;}
+.winning-numbers { font-weight: 700; color: #f0b90b; font-size: 1.2em; background-color: rgba(240, 185, 11, 0.1); padding: 5px 10px; border-radius: 4px; display: inline-block; border: 1px solid rgba(240, 185, 11, 0.3); margin-left: 8px; font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; letter-spacing: 1px; }
 
-.winning-numbers {
-  font-weight: 700;
-  color: #f0b90b; /* Dorado brillante */
-  font-size: 1.2em;
-  background-color: rgba(240, 185, 11, 0.1);
-  padding: 5px 10px;
-  border-radius: 4px;
-  display: inline-block;
-  border: 1px solid rgba(240, 185, 11, 0.3);
-  margin-left: 8px;
-  font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
-  letter-spacing: 1px;
-}
-
-
-/* --- Footer --- */
-.app-footer {
-  text-align: center;
-  padding: 25px 20px;
-  font-size: 0.8em;
-  color: #58606a; /* Gris más oscuro para contraste */
-  border-top: 1px solid #3a3f4a; /* Separador consistente */
-  background-color: #22252c; /* Fondo igual a ítems de lista */
-}
-/* frontend/src/App.css - Estilos Adicionales para Instrucciones */
-
-/* --- Sección de Instrucciones --- */
-.instructions-section {
-  background-color: rgba(255, 255, 255, 0.04); /* Fondo ligeramente más claro */
-  border-bottom: 1px solid #444a55; /* Separador más oscuro para contraste */
-}
-
-.instructions-section h2 span[role="img"] {
-    margin-right: 8px;
-    font-size: 0.9em;
-}
-.instructions-section h3 span[role="img"] {
-    margin-right: 8px;
-     font-size: 0.9em;
-}
-
-.instructions-list, .rules-list {
-  list-style-position: inside; /* Bolitas/números dentro del área */
-  margin-left: 10px;
-  margin-bottom: 20px;
-  color: #b0b8c0; /* Texto un poco más claro */
-}
-.instructions-list li, .rules-list li {
-  margin-bottom: 12px;
-  padding-left: 5px;
-}
-.instructions-list strong, .rules-list strong {
-  color: #e4e6eb; /* Resaltar pasos/premios */
-  font-weight: 600;
-}
-
-.rules-list {
-    list-style-type: disc; /* Usar bolitas para reglas */
-     margin-top: 10px;
-}
-
-.rules-list li {
-    margin-bottom: 8px; /* Menos espacio entre reglas */
-}
+.app-footer { text-align: center; padding: 25px 20px; font-size: 0.8em; color: #58606a; border-top: 1px solid #3a3f4a; background-color: #22252c; }
