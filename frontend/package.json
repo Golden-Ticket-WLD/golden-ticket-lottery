@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@worldcoin/idkit": "^2.0.2",
+    "@worldcoin/minikit-js": "^1.9.1",
     "axios": "^1.8.4",
     "moment-timezone": "^0.5.48",
     "react": "^18.2.0",
