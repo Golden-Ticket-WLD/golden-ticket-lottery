@@ -1,20 +1,31 @@
+// frontend/src/main.jsx - CON MiniKitProvider (CORREGIDO)
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+// Corregir la importación si la estructura interna del paquete cambió:
+// Intenta importar el Provider directamente. Si no funciona, puede que
+// el nombre o la ruta hayan cambiado en la librería minikit-js.
 import { MiniKitProvider } from '@worldcoin/minikit-js';
 import App from './App.jsx';
-import './index.css'; // O App.css si renombraste
+import './index.css';
 
 const minikitConfig = {
-    // Proveer origin para inicializar MiniKit
-    // Usamos 'typeof window' para evitar errores en SSR/build si la variable no existe
     origin: typeof window !== 'undefined' ? window.location.origin : '',
-    // Puedes añadir otras opciones de config aquí si lo necesitas
+    // Configuración necesaria para MiniKit, según su documentación:
+    app_id: import.meta.env.VITE_WORLDCOIN_APP_ID, // App ID es necesaria aquí
+    action: import.meta.env.VITE_WORLDCOIN_ACTION_ID // Action ID también es necesaria
+    // credential_types: ['orb', 'phone'], // Opcional: puedes definirlas aquí o al llamar al comando
 };
 
+// Verificar que los valores de configuración existen
+if (!minikitConfig.app_id || !minikitConfig.action) {
+    console.error("ERROR CRÍTICO: VITE_WORLDCOIN_APP_ID o VITE_WORLDCOIN_ACTION_ID no están definidos en .env.local! MiniKit no funcionará.");
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
-  // Provider de MiniKit envolviendo App
-  <MiniKitProvider config={minikitConfig}>
-    <App />
-  </MiniKitProvider>
-  // Sin React.StrictMode por ahora
+  <React.StrictMode> {/* Volver a activar StrictMode es buena idea */}
+      {/* Pasar la configuración al Provider */}
+      <MiniKitProvider config={minikitConfig}>
+          <App />
+      </MiniKitProvider>
+  </React.StrictMode>
 );
